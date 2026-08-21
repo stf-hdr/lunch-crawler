@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mittagsmenüs — Freitag, 21.08.2026</title>
+<style>
+
+:root {
+    /* Ink-on-paper palette: monochrome greys like a printed newspaper. */
+    --bg: #cfcfcf;
+    --card-bg: #ffffff;
+    --text: #252525;
+    --muted: #7d7d7d;
+    --accent: #545454;
+    --accent-dark: #252525;
+    --success: #545454;
+    --error: #252525;
+    --border: #cfcfcf;
+    --shadow: 0 1px 2px rgba(37, 37, 37, 0.08), 0 8px 24px -12px rgba(37, 37, 37, 0.2);
+    --shadow-hover: 0 4px 8px rgba(37, 37, 37, 0.1), 0 20px 40px -16px rgba(37, 37, 37, 0.3);
+
+    /* Page width grows on large monitors so the card grid uses more columns
+       and less scrolling is needed.  Stepped up via media queries below. */
+    --page-max: 1100px;
+    --card-min: 300px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- Hero header ------------------------------------------------------- */
+
+.hero {
+    background: linear-gradient(135deg, #252525 0%, #545454 55%, #7d7d7d 100%);
+    color: #ffffff;
+    padding: 3.25rem 1rem 4.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 3rem;
+    background: var(--bg);
+    -webkit-clip-path: ellipse(55% 100% at 50% 100%);
+    clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+.hero-inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.hero h1 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(1.9rem, 5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.hero .date {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    padding: 0.35rem 1.1rem;
+    font-size: 1rem;
+    backdrop-filter: blur(4px);
+}
+
+.hero .stats {
+    margin: 1.1rem 0 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* --- Filter bar -------------------------------------------------------- */
+
+.filterbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+    margin: -1.4rem auto 1.75rem;
+    max-width: var(--page-max);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.filter-btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+        transform 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.filter-btn .count {
+    background: var(--bg);
+    color: var(--muted);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.05rem 0.5rem;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent-dark);
+    transform: translateY(-1px);
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+    border-color: transparent;
+    color: #ffffff;
+}
+
+.filter-btn.active .count {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+}
+
+/* --- Content ------------------------------------------------------------ */
+
+.container {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+}
+
+.kitchen-group {
+    margin-bottom: 2.25rem;
+    animation: fade-in 0.4s ease both;
+}
+
+.kitchen-group[hidden] { display: none; }
+
+.group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    /* Allow the count badge to wrap below the title when the header's
+       min-content width exceeds the container (very narrow screens). */
+    flex-wrap: wrap;
+}
+
+.group-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    font-size: 1.25rem;
+    border-radius: 12px;
+    background: var(--kitchen-color, var(--accent));
+    box-shadow: 0 6px 14px -6px var(--kitchen-color, var(--accent));
+}
+
+.group-header h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    /* Long kitchen names must be allowed to shrink and wrap mid-word on
+       ultra-narrow screens instead of overflowing the page. */
+    min-width: 0;
+    overflow-wrap: break-word;
+}
+
+.group-count {
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.1rem 0.65rem;
+}
+
+.cards {
+    display: grid;
+    /* min() guards against horizontal overflow on narrow phone screens,
+       where even a single --card-min-wide card would not fit. */
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--card-min), 100%), 1fr));
+    gap: 1.1rem;
+    align-items: start;
+}
+
+/* --- Restaurant cards --------------------------------------------------- */
+
+.restaurant {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.35rem 1.4rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fade-in 0.45s ease both;
+}
+
+.restaurant::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.restaurant.success::before { background: linear-gradient(90deg, var(--success), #9a9a9a); }
+.restaurant.error::before { background: linear-gradient(90deg, var(--error), #545454); }
+.restaurant.missing::before { background: linear-gradient(90deg, #9a9a9a, #cfcfcf); }
+
+.restaurant:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 0.8rem;
+    overflow-wrap: break-word;
+}
+
+.name a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.name a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+ul.menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+ul.menu li {
+    position: relative;
+    padding: 0.45rem 0 0.45rem 1.25rem;
+    margin: 0;
+    border-bottom: 1px dashed var(--border);
+    overflow-wrap: break-word;
+}
+
+ul.menu li:last-child { border-bottom: none; }
+
+ul.menu li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.95rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #9a9a9a);
+}
+
+.no-menu {
+    color: var(--muted);
+    font-style: italic;
+}
+
+.error-text {
+    color: var(--error);
+    font-weight: 600;
+}
+
+.error-detail {
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    word-break: break-word;
+}
+
+.no-results {
+    text-align: center;
+    color: var(--muted);
+    padding: 3rem 0;
+    font-size: 1.05rem;
+}
+
+footer {
+    text-align: center;
+    margin-top: 2.5rem;
+    padding: 1.5rem 1rem 2rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .restaurant, .kitchen-group { animation: none; }
+    .restaurant, .filter-btn { transition: none; }
+}
+
+/* --- Phone screens ------------------------------------------------------- */
+
+/* Breakpoint 640px matches the grid's natural 1→2 column switch, so the
+   single-column rule below closes any gap. */
+@media (max-width: 640px) {
+    .hero { padding: 2.25rem 0.75rem 3.5rem; }
+    .hero .stats { font-size: 0.85rem; }
+
+    /* Force exactly one card column with plain CSS.  This is deliberately
+       independent of the min()/percentage math in .cards above: if a browser
+       resolves the percentage inside min() incorrectly, the grid could
+       otherwise keep multiple (clipped) columns at narrow widths. */
+    .cards { grid-template-columns: 1fr; }
+
+    .filterbar {
+        /* Compact: keep the filter as one horizontally scrollable row
+           instead of a multi-row block that pushes the menus down. */
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        padding: 0.6rem 0.75rem;
+        margin: -1.2rem 0.75rem 1.25rem;
+    }
+
+    .filter-btn { flex-shrink: 0; padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+
+    .container { padding: 0 0.75rem 2rem; }
+
+    .kitchen-group { margin-bottom: 1.75rem; }
+
+    .restaurant { padding: 1.1rem 1.05rem; border-radius: 14px; }
+
+    footer { padding-inline: 0.75rem; }
+}
+
+/* --- Large screens ------------------------------------------------------- */
+
+/* 1440p and up (e.g. 27" monitors at default scaling): wider grid with a
+   4th card column. */
+@media (min-width: 1500px) {
+    :root { --page-max: 1400px; --card-min: 320px; }
+}
+
+/* 4K-class widths: use most of the screen with up to 6 card columns. */
+@media (min-width: 2200px) {
+    :root { --page-max: 1900px; --card-min: 340px; }
+}
+
+/* Still wider (ultrawide / 5K): cap at 2300px so menu lines stay readable
+   and the page never looks stretched. */
+@media (min-width: 3000px) {
+    :root { --page-max: 2300px; }
+}
+
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="hero-inner">
+<h1>🍽 Mittagsmenüs</h1>
+<div class="date">Freitag, 21.08.2026 — 21:40 Uhr</div>
+<p class="stats">13 Restaurants · 13 mit Menü heute</p>
+</div>
+</header>
+<div class="container">
+<nav class="filterbar" aria-label="Filter nach Küchenart">
+<button type="button" class="filter-btn active" data-filter="alle">Alle <span class="count">13</span></button>
+<button type="button" class="filter-btn" data-filter="Traditionell">🥘 Traditionell <span class="count">6</span></button>
+<button type="button" class="filter-btn" data-filter="Mediterran">🫒 Mediterran <span class="count">1</span></button>
+<button type="button" class="filter-btn" data-filter="Italienisch">🍝 Italienisch <span class="count">1</span></button>
+<button type="button" class="filter-btn" data-filter="Steakhaus">🥩 Steakhaus <span class="count">1</span></button>
+<button type="button" class="filter-btn" data-filter="Indisch">🍛 Indisch <span class="count">2</span></button>
+<button type="button" class="filter-btn" data-filter="Asiatisch">🍜 Asiatisch <span class="count">2</span></button>
+</nav>
+<main>
+<section class="kitchen-group" data-kitchen="Traditionell" style="--kitchen-color: #252525">
+<div class="group-header">
+<span class="group-icon" aria-hidden="true">🥘</span>
+<h2>Traditionell</h2>
+<span class="group-count">6</span>
+</div>
+<div class="cards">
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.bierometer.at/menueplan" target="_blank" rel="noopener noreferrer">Bierometer</a></h3>
+<ul class="menu"><li>Suppe: Leberknödelsuppe</li><li>Menü 1: Bauern Cordon - gerollt m. Speck, Käse, Zwiebel u. gem. Salat</li><li>Menü 2: Scholle gebacken mit Kartoffelsalat</li></ul>
+</article>
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.waldviertlerhof.at/Mittagsmen%C3%BC" target="_blank" rel="noopener noreferrer">Waldviertlerhof</a></h3>
+<ul class="menu"><li>Klare Gemüsesuppe Gegrilltes Merluza-Filet</li><li>Paradeiser-Olivenvinaigrette</li><li>Rosmarinerdäpfeln</li></ul>
+</article>
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.silberwirt.at/essen-trinken/mittag/" target="_blank" rel="noopener noreferrer">Silberwirt</a></h3>
+<ul class="menu"><li>MENU #1: Gemüse Couscous mit gebratenen Hühnerstreifen 10,90</li><li>MENU #2: Gegrilltes Buntbarschfilet auf Kräuter-Eierschwammerl-Erdäpfelgröstel 10,90</li><li>MENU #3: Vichyssoise-Kalte Erdäpfel-Lauchsuppe Platschinken mit Karamell-Bananen und Schlogobers je 2 €</li></ul>
+</article>
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.fladerei.com/dyn_inhalte/mittersteig/tagesfladen_mittersteig.html" target="_blank" rel="noopener noreferrer">Fladerei</a></h3>
+<ul class="menu"><li>Tomatensauce mit Salami, Jungzwiebel und Bergkäse</li></ul>
+</article>
+<article class="restaurant success">
+<h3 class="name"><a href="https://wieden-braeu.at/" target="_blank" rel="noopener noreferrer">Wiedenbraeu</a></h3>
+<ul class="menu"><li>„Fish &amp; Chips“ mit ERbsendip A,C,D,G,L,O</li></ul>
+</article>
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.weinschenke.wien/_files/ugd/5ae4e7_917aa928210d4a27b505a8873546f040.pdf" target="_blank" rel="noopener noreferrer">Weinschenke</a></h3>
+<ul class="menu"><li>Unsere Burger</li><li>Double Cheeseburger – € 13,90</li><li>Tijuana Picante – € 14,90</li><li>El Chicano – € 15,90</li><li>Der Burger – € 16,90</li><li>Depardieus Liebling – € 17,90</li><li>Der wilde Kerl – € 16,90</li><li>Billy the Kid – € 17,90</li><li>Sir Hendl – € 15,90</li></ul>
+</article>
+</div>
+</section>
+<section class="kitchen-group" data-kitchen="Mediterran" style="--kitchen-color: #545454">
+<div class="group-header">
+<span class="group-icon" aria-hidden="true">🫒</span>
+<h2>Mediterran</h2>
+<span class="group-count">1</span>
+</div>
+<div class="cards">
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.cuadro.at/essen-trinken/mittag/" target="_blank" rel="noopener noreferrer">Cuadro</a></h3>
+<ul class="menu"><li>MENU #1: Vegetarische-Enchiladas mit Papika, Mais, Paradeiser, Kidney-Bohnen, Käse überbacken und Sauerrahm 10,90</li><li>MENU #2: Sommer-Salat-Bowl mit gebackenen Mozzarella-Bällchen, Paprikastreifen, Kirschparadeirn, in Limettendressing und knusprigen Christophbrot 10,90</li></ul>
+</article>
+</div>
+</section>
+<section class="kitchen-group" data-kitchen="Italienisch" style="--kitchen-color: #616161">
+<div class="group-header">
+<span class="group-icon" aria-hidden="true">🍝</span>
+<h2>Italienisch</h2>
+<span class="group-count">1</span>
+</div>
+<div class="cards">
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.margareta.at/essen-trinken/mittag/" target="_blank" rel="noopener noreferrer">Margareta</a></h3>
+<ul class="menu"><li>MENU #1: Tilapia-Filet in Parmesanpanade auf mediterranem Erdäpfelsalat, Oliven, Jungzwiebel, getrockneten Paradeisern und Bärlauch-Hollandaise</li><li>MENU #2: Pizza mit Paradeisern, Mozzarella Speck, Salami und Pfefferoni</li><li>MENU #3: Gurkenkaltschale mit Dille und Mascarpone Karamellisiertes Cappuccino-Panna Cotta je 2€</li></ul>
+</article>
+</div>
+</section>
+<section class="kitchen-group" data-kitchen="Steakhaus" style="--kitchen-color: #3d3d3d">
+<div class="group-header">
+<span class="group-icon" aria-hidden="true">🥩</span>
+<h2>Steakhaus</h2>
+<span class="group-count">1</span>
+</div>
+<div class="cards">
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.block-house.at/block-house-restaurant-best-steaks-since-1968/block-house-qualitaet-ist-unsere-leidenschaft/block-house-lunch-time/" target="_blank" rel="noopener noreferrer">Block House</a></h3>
+<ul class="menu"><li>Schnitzel Wiener Art
+mit Barbecue-Steaksauce und knusprigen Pommes frites €13,90</li><li>Wochenhighlight: Kleiner Steakteller
+mit Blattspinat, ofenfrischer Baked Potato und BLOCK HOUSE Brot €15,40</li></ul>
+</article>
+</div>
+</section>
+<section class="kitchen-group" data-kitchen="Indisch" style="--kitchen-color: #6b6b6b">
+<div class="group-header">
+<span class="group-icon" aria-hidden="true">🍛</span>
+<h2>Indisch</h2>
+<span class="group-count">2</span>
+</div>
+<div class="cards">
+<article class="restaurant success">
+<h3 class="name"><a href="https://tasteofindia.at/" target="_blank" rel="noopener noreferrer">Taste of India</a></h3>
+<ul class="menu"><li>Tomatencremesuppe G</li><li>1 Butter Chicken Hühnerfilets im Tandoor Ofen gegrillt in Tomatensauce, verfeinert mit Butter und Gewürzen G,H</li><li>2 Chicken Curry Hühnerfleisch in milder Currysauce H</li><li>3 Dal Makhani Schwarze Linsen mit rote Bohnen, Butter, Knoblauch, Ingwer und Tomaten</li><li>4 Vegetable Biryani mit Gemüse, Rosinen, Cashewnüssen und Mandeln</li></ul>
+</article>
+<article class="restaurant success">
+<h3 class="name"><a href="https://usercontent.one/wp/www.spiceofindia.at/wp-content/uploads/2024/09/Tagesmenu.pdf?media=1725665590" target="_blank" rel="noopener noreferrer">Spice of India</a></h3>
+<ul class="menu"><li>Alle Tagesmenüs inkl. Reis und Naan – € 10,50</li><li>1) CHICKEN DAL – Hühnerfleisch mit gelben Linsen, in Curry Sauce (G)</li><li>2) BEEF VINDALOO – Rindfleisch mit Kartoffel in würziger Currysauce (G)</li><li>3) ALLO MATTER – Kartoffel mit Erbsen in Cremiger Curry Sauce (G)</li></ul>
+</article>
+</div>
+</section>
+<section class="kitchen-group" data-kitchen="Asiatisch" style="--kitchen-color: #7d7d7d">
+<div class="group-header">
+<span class="group-icon" aria-hidden="true">🍜</span>
+<h2>Asiatisch</h2>
+<span class="group-count">2</span>
+</div>
+<div class="cards">
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.jinco.at/_files/ugd/dc593d_7ac4258c47464c3087080d39a556397a.pdf" target="_blank" rel="noopener noreferrer">Jinco</a></h3>
+<ul class="menu"><li>Dienstag – Freitag, 11:30 – 15:00 Uhr</li><li>Inklusive: 2 Frühlingsrollen + 2 veg. Gyoza oder Miso-Suppe</li><li>VEGGIE WOK – Brokkoli | Zucchini | Zuckererbsen | Karotten | Champignon | Black Fungus | Reis</li><li>CRISPY CHICKEN – Hühnerfleisch | Teriyaki Sauce | wahlweise mit Reis oder Nudeln</li><li>BLACK PEPPER – Tofu oder Hühner- oder Rindfleisch | Pfeffer-Sauce | Gemüse | Reis</li><li>RED THAI CURRY – Tofu oder Hühner- oder Rindfleisch | würziges Curry | Gemüse | Reis</li><li>CRISPY DUCK – Ente | Teriyaki Sauce | wahlweise mit Reis oder Nudeln</li><li>FRIED NOODLE – Gemüse oder Hühnerfleisch | Gemüse | Nudeln</li><li>€ 12,90</li></ul>
+</article>
+<article class="restaurant success">
+<h3 class="name"><a href="https://www.tantanvienna.com/TanTan_Speisekarte_final.pdf" target="_blank" rel="noopener noreferrer">TanTan</a></h3>
+<ul class="menu"><li>M1. Crispy Chicken 香酥鸡炒饭 ACFN 10,90</li><li>M2. Sze Chuan Beef 四川牛肉 ACFN 11,90</li><li>M3. Sha Cha Duck 沙茶鸭 AC FN 10,90</li><li>M4. RedCurry DouFu 红咖喱豆腐 AD FN 10,90</li><li>M5. SuXiaoLongBao 素小笼包 A FN 10,90</li><li>M6. Mango Fisch 芒果鱼 A FN 12,90</li></ul>
+</article>
+</div>
+</section>
+</main>
+<footer>Erstellt mit Lunch Crawler · 21.08.2026</footer>
+</div>
+<script>
+
+(function () {
+    "use strict";
+    var buttons = document.querySelectorAll(".filter-btn");
+    var groups = document.querySelectorAll(".kitchen-group");
+
+    buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            var filter = btn.getAttribute("data-filter");
+            buttons.forEach(function (b) {
+                b.classList.toggle("active", b === btn);
+            });
+            groups.forEach(function (g) {
+                var show = filter === "alle" || g.getAttribute("data-kitchen") === filter;
+                g.hidden = !show;
+            });
+        });
+    });
+})();
+
+</script>
+</body>
+</html>
